@@ -30,4 +30,3 @@ for i in range(len(temp_df)):
 print(len(low_vol))
 print(len(med_vol))
 print(len(high_vol))
-print("Hello")
