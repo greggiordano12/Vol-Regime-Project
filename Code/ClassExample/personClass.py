@@ -16,3 +16,7 @@ class Person:
 # Person_trial = Person("Gregory", 72, 21, "male")
 # Person_trial.create_nickname("Greg")
 # Person_trial.nickname
+
+print("Hello World")
+
+2+2
