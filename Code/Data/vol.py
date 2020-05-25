@@ -57,3 +57,20 @@ plt.bar(["Low Vol", "Med Vol", "High Vol"], [len(low_vol_dates), len(med_vol_dat
 plt.xlabel("Volatility Regime")
 plt.ylabel("Number of Days")
 plt.title("Volatility Regime Distribution")
+
+
+#Create 5 day trailing average for vix data
+all_averages = list(vix_close_arr[:5])
+for i in range(5,len(vix_close_arr)):
+    temp_avg = sum(vix_close_arr[i-5:i])/5
+    all_averages.append(temp_avg)
+
+hor_30 = [30 for i in vix_close]
+hor_20 = [20 for i in vix_close]
+plt.plot(vix_df.index,all_averages)
+plt.plot(vix_df.index, hor_30)
+plt.plot(vix_df.index, hor_20)
+plt.xlabel("Year")
+plt.ylabel("5 day average")
+plt.title("Time Series of VIX 5-day average 2007-Present")
+plt.show()
