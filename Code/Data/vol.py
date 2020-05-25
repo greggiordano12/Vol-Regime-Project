@@ -75,6 +75,7 @@ plt.ylabel("5 day average")
 plt.title("Time Series of VIX 5-day average 2007-Present")
 plt.show()
 
+#Create data set with trailing averages that we can use to test with random forest
 low_vol_dates, med_vol_dates, high_vol_dates = [], [], []
 vol_regime = []
 for i in range(len(all_averages)):
