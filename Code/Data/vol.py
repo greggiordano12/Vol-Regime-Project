@@ -74,3 +74,20 @@ plt.xlabel("Year")
 plt.ylabel("5 day average")
 plt.title("Time Series of VIX 5-day average 2007-Present")
 plt.show()
+
+low_vol_dates, med_vol_dates, high_vol_dates = [], [], []
+vol_regime = []
+for i in range(len(all_averages)):
+    if(all_averages[i] < 20):
+        low_vol_dates.append(dates[i])
+        vol_regime.append(1)
+    elif(all_averages[i] > 30):
+        high_vol_dates.append(dates[i])
+        vol_regime.append(3)
+    else:
+        med_vol_dates.append(dates[i])
+        vol_regime.append(2)
+
+final_data = pd.DataFrame({"Vol Regime": vol_regime})
+final_data.index = dates
+final_data
