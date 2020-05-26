@@ -3,6 +3,7 @@ import numpy as np
 import pandas_datareader.data as pdr
 import matplotlib.pyplot as plt
 
+
 vix_df = pdr.DataReader("^VIX","yahoo", '2007-01-01')
 vix_close = vix_df.Close
 vix_close_arr = np.array(vix_close)
