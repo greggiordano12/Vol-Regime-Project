@@ -61,8 +61,9 @@ class Vol_Data:
         return vol_regime_df
 
 
-    def weekly_vol(self, number_of_days = 5):
-        #I need to adjust this function for the weeks that do not start on Mondays!
+    def weekly_vol(self):
+        #outputs time series data frame with the weekly volatility regime numbers. If average vix for the work week is
+        # > 30 the weekly regime is tagged as a 3. The dates are the dates that start each work week.
         weekly_vol_regimes = []
         week_start_dates = []
         dates = self.vix_df.index
@@ -70,19 +71,19 @@ class Vol_Data:
         while i<len(dates):
             temp_week = []
             temp_week_day = []
-            if dates[i].weekday() == 0:
-                temp_week_day.append(dates[i].weekday())
-                week_start_dates.append(dates[i])
-                temp_week.append(self.vix_close_arr[i])
-                i+=1
-                if i < len(dates):
-                    while dates[i].weekday() not in temp_week_day :
-                        temp_week.append(self.vix_close_arr[i])
-                        temp_week_day.append(dates[i].weekday())
-                        i+=1
-                        if i >= len(dates):
-                            break
-                temp_avg_vol = sum(temp_week)/len(temp_week)
+            temp_week_day.append(dates[i].weekday()) # adding start of the week day
+            week_start_dates.append(dates[i]) # adding the start date to dates list
+            temp_week.append(self.vix_close_arr[i]) # add the closing price of the start of the week
+            i+=1 # increment up
+            if i < len(dates):
+                while (dates[i].weekday() not in temp_week_day) and (dates[i].weekday() != 0):
+                    # This while loop gathers data for current week. Adjusts for weeks that have Mondays off.
+                    temp_week.append(self.vix_close_arr[i])
+                    temp_week_day.append(dates[i].weekday())
+                    i+=1
+                    if i >= len(dates):
+                        break
+            temp_avg_vol = sum(temp_week)/len(temp_week)
 
             if temp_avg_vol <20:
                 weekly_vol_regimes.append(1)
@@ -104,14 +105,8 @@ class Vol_Data:
 
 
 
-    #run gen_regime_data
+
 
 
 trial_vol = Vol_Data("2007-01-02", "2020-05-25")
-trial_vol.weekly_vol()
-
-
-
-findDay(vol_reg[1])
-
-lst = [1,2,3,4]
+trial_vol.weekly_vol() #weekly_vol should be the target data set for when we run our tests. 
