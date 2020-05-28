@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import pandas_datareader.data as pdr
 import matplotlib.pyplot as plt
+import datetime
+import calendar
+
 
 class Vol_Data:
 
@@ -10,8 +13,17 @@ class Vol_Data:
         self.end_date = end_date
         #create attributes for rest of class
         self.vix_df = pdr.DataReader("^VIX", "yahoo", start_date, end_date)
+        dates = self.vix_df.index
+        #this loop reconfigures data frame to always start on a monday (beginning of the week)
+        dropped_dates = []
+        for d in dates:
+            if d.weekday() == 0:
+                break
+            dropped_dates.append(d)
+        self.vix_df = self.vix_df.drop(dropped_dates)
         self.vix_close = self.vix_df.Close
         self.vix_close_arr = np.array(self.vix_close)
+
 
     def line_plot(self):
         #Provides a line chart of the vix time-series w 20 and 30 hor lines
@@ -49,25 +61,57 @@ class Vol_Data:
         return vol_regime_df
 
 
-    def regime_trailing_avg(self, number_of_days = 5):
-        all_averages = list(self.vix_close_arr[:number_of_days])
-        for i in range(number_of_days, len(self.vix_close_arr)):
-            temp_avg = sum(self.vix_close_arr[i-number_of_days:i])/number_of_days
-            if temp_avg < 20:
-                all_averages.append(1)
-            elif temp_avg > 30:
-                all_averages.append(3)
+    def weekly_vol(self, number_of_days = 5):
+        #I need to adjust this function for the weeks that do not start on Mondays!
+        weekly_vol_regimes = []
+        week_start_dates = []
+        dates = self.vix_df.index
+        i = 0
+        while i<len(dates):
+            temp_week = []
+            temp_week_day = []
+            if dates[i].weekday() == 0:
+                temp_week_day.append(dates[i].weekday())
+                week_start_dates.append(dates[i])
+                temp_week.append(self.vix_close_arr[i])
+                i+=1
+                if i < len(dates):
+                    while dates[i].weekday() not in temp_week_day :
+                        temp_week.append(self.vix_close_arr[i])
+                        temp_week_day.append(dates[i].weekday())
+                        i+=1
+                        if i >= len(dates):
+                            break
+                temp_avg_vol = sum(temp_week)/len(temp_week)
+
+            if temp_avg_vol <20:
+                weekly_vol_regimes.append(1)
+            elif temp_avg_vol > 30:
+                weekly_vol_regimes.append(3)
             else:
-                all_averages.append(2)
+                weekly_vol_regimes.append(2)
 
-        trailing_df = pd.DataFrame({"Vol Regime " + str(number_of_days) + " Day Avg":all_averages[number_of_days:]})
-        trailing_df.index = self.vix_df.index[number_of_days:]
+        week_dic = {"Date":week_start_dates}
+        weekly_vol_regimes = pd.DataFrame({"Week":week_start_dates,"Weekly_Vol":weekly_vol_regimes})
+        weekly_vol_regimes = weekly_vol_regimes.set_index("Week")
 
-        return trailing_df
+
+        return weekly_vol_regimes
+
+
+
+
 
 
 
     #run gen_regime_data
 
 
-Greg = Vol_Data("2007-01-01", "2020-05-25")
+trial_vol = Vol_Data("2007-01-02", "2020-05-25")
+trial_vol.weekly_vol()
+
+
+
+findDay(vol_reg[1])
+
+lst = [1,2,3,4]
