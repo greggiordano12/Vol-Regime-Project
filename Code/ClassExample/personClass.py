@@ -7,16 +7,19 @@ class Person:
         self.age = age
         self.sex = sex
         self.nickname = nickname
+        self.trial = age + 5
 
     #When we use a class method, we need to have the self in there to reference instances within the class
     def create_nickname(self,name):
         self.nickname = name
+        self.kind = "female"
 
 
-# Person_trial = Person("Gregory", 72, 21, "male")
-# Person_trial.create_nickname("Greg")
-# Person_trial.nickname
+Person_trial = Person("Gregory", 72, 21, "male")
+Person_trial.create_nickname("Greg")
+Person_trial.kind
 
 print("Hello World")
 
 2+2
+Person_trial.trial
