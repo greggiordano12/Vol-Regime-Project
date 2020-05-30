@@ -14,19 +14,13 @@ fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
 # commodity data
 
 
-data = fred.get_series_latest_release('RPONTSYD')
-data.df = pd.DataFrame(data)
-data.df.columns = ['Overnight Repo']
-print(data.df.head())
-print(data.df.columns)
-
-# Do we use seasonally adjusted data or not?
 # initial unemployment claims seasonally adjusted
-icsa = fred.get_series("ICSA", observation_start = "2000-01-01")
-type(icsa)
-icsa.df = pd.DataFrame(icsa)
-print(icsa.df.head())
+icsa = pd.DataFrame(fred.get_series("ICSA", observation_start = "2000-01-01"))
+print(icsa.head())
 
+# Crude oil prices
+crudeOilEuro = pd.DataFrame(fred.get_series("DCOILBRENTEU", observation_start = "2000-01-03"))
+print(crudeOilEuro.head())
 
 # High yield index option adjusted spread
 highYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLH0A0HYM2", observation_start = "2000-01-03"))
@@ -37,11 +31,15 @@ goldFixingPrice = pd.DataFrame(fred.get_series("GOLDAMGBD228NLBM", observation_s
 print(goldFixingPrice.head())
 
 # Corporate bond yields AAA
-
+corporateBondYield = pd.DataFrame(fred.get_series("DAAA", observation_start = "2000-01-04"))
+print(corporateBondYield.head())
 
 # Overnight AA financial commercial paper interest rate
 overnightPaperInterestRate = pd.DataFrame(fred.get_series("RIFSPPFAAD01NB", observation_start = "2000-01-01"))
 print(overnightPaperInterestRate.head())
 
+# Euro high yield index-option adjusted
+euroHighYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLHE00EHYIOAS", observation_start = "2000-01-03"))
+print(euroHighYieldOptionSpread.head())
 
-fred.search('BAMLH0A0HYM2')
+fred.search('SP 500 volume')
