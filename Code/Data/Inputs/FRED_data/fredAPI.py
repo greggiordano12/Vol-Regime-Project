@@ -21,26 +21,32 @@ print(icsa.head())
 # Crude oil prices
 crudeOilEuro = pd.DataFrame(fred.get_series("DCOILBRENTEU", observation_start = "2000-01-01"))
 print(crudeOilEuro.head())
+crudeOilEuro.shape
 
 # High yield index option adjusted spread
 highYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLH0A0HYM2", observation_start = "2000-01-01"))
 print(highYieldOptionSpread.head())
+highYieldOptionSpread.shape
 
 # Gold fixing Price
 goldFixingPrice = pd.DataFrame(fred.get_series("GOLDAMGBD228NLBM", observation_start = "2000-01-01"))
 print(goldFixingPrice.head())
+goldFixingPrice.shape
 
 # Corporate bond yields AAA
 corporateBondYield = pd.DataFrame(fred.get_series("DAAA", observation_start = "2000-01-01"))
 print(corporateBondYield.head())
+corporateBondYield.shape
 
 # Overnight AA financial commercial paper interest rate
 overnightPaperInterestRate = pd.DataFrame(fred.get_series("RIFSPPFAAD01NB", observation_start = "2000-01-01"))
 print(overnightPaperInterestRate.head())
+overnightPaperInterestRate.shape
 
 # Euro high yield index-option adjusted
 euroHighYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLHE00EHYIOAS", observation_start = "2000-01-01"))
 print(euroHighYieldOptionSpread.head())
+euroHighYieldOptionSpread.shape
 
 
-fred.search('volume')
+fred.search(101)
