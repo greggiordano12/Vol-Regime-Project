@@ -58,13 +58,19 @@ class Vol_Data:
         return vol_regime_df
 
 
-    def weekly_stats(self, data):
+    def weekly_stats(self, data_df):
         #outputs weekly_data list that is the average weekly data from the given data array. Also outputs
         #week_start_dates that is a list of the first day of each week for the weekly data (used to identify start of weeks)
         # data: meant to be an array defined in constructor that matches self.dates in index
+
         weekly_data = []
         week_start_dates = []
         dates = self.dates
+        data_dates = data_df.index
+        drop_indicies = data_dates.difference(dates)
+        data_df = data_df.drop(drop_indicies)
+        data = data_df.iloc[0:,0]
+        print(data)
         i = 0
         while i<len(dates):
             temp_week = []
@@ -90,7 +96,7 @@ class Vol_Data:
         #leverages weekly_stats to produce average weekly volatiltiy regimes. >30 is 3, <20 is 1, <30 and >20 is 2
         #outputs a dataframe that is indexed with the date of the start of the week and the data is the 1,2,3s representing
         #the weekly vol regime
-        avg_vol_data, week_start_dates = self.weekly_stats(self.vix_close_arr)
+        avg_vol_data, week_start_dates = self.weekly_stats(pd.DataFrame(self.vix_close))
         weekly_vol_regimes = []
         for temp_avg_vol in avg_vol_data:
             if temp_avg_vol <20:
@@ -107,7 +113,7 @@ class Vol_Data:
 
     def weekly_spy_volume(self):
         #outputs dataframe of weekly spy volume averages with index as start of week
-        avg_volume_data, week_start_dates = self.weekly_stats(self.spy_volume_arr)
+        avg_volume_data, week_start_dates = self.weekly_stats(pd.DataFrame(self.spy_volume))
         week_dic = {"Date":week_start_dates}
         weekly_volume_avg = pd.DataFrame({"Week":week_start_dates,"Weekly_Volume":avg_volume_data})
         weekly_volume_avg = weekly_volume_avg.set_index("Week")
@@ -118,6 +124,7 @@ class Vol_Data:
         fred_ids = self.fred_strings
         input_df = self.weekly_spy_volume()
         for id in fred_ids:
+            print(id)
             temp_df =  pd.DataFrame(fred.get_series(id, observation_start = self.start_date))
             avg_temp_data, temp_start_dates = self.weekly_stats(temp_df)
             temp_weekly_df = pd.DataFrame({"Week":temp_start_dates, id:temp_avg_data})
