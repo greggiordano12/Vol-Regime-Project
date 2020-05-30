@@ -4,11 +4,11 @@ import pandas_datareader.data as pdr
 import matplotlib.pyplot as plt
 import datetime
 import calendar
-
+from fredapi import Fred
 
 class Vol_Data:
 
-    def __init__(self, start_date, end_date=None, ):
+    def __init__(self, start_date, end_date=None, fred_strings = None):
         self.start_date = start_date
         self.end_date = end_date
         #create attributes for rest of class
@@ -19,6 +19,7 @@ class Vol_Data:
         self.spy_df = pdr.DataReader("SPY", "yahoo", start_date, end_date)
         self.spy_volume = self.spy_df.Volume
         self.spy_volume_arr = np.array(self.spy_volume)
+        self.fred_strings = fred_strings
 
 
     def line_plot(self):
@@ -112,6 +113,18 @@ class Vol_Data:
         weekly_volume_avg = weekly_volume_avg.set_index("Week")
         return weekly_volume_avg
 
+    def weekly_fred_data(self):
+        fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
+        fred_ids = self.fred_strings
+        input_df = self.weekly_spy_volume()
+        for id in fred_ids:
+            temp_df =  pd.DataFrame(fred.get_series(id, observation_start = self.start_date))
+            avg_temp_data, temp_start_dates = self.weekly_stats(temp_df)
+            temp_weekly_df = pd.DataFrame({"Week":temp_start_dates, id:temp_avg_data})
+            temp_weekly_df = temp_weekly_df.set_index("Week")
+            input_df = pd.concat([input_df, temp_weekly_df], axis = 1)
+
+        return input_df
 
 
 
@@ -120,6 +133,14 @@ class Vol_Data:
 
 
 
-trial_vol = Vol_Data("2007-01-02")
-trial_vol.weekly_spy_volume()
+
+
+
+
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
+trial_vol.weekly_fred_data()
+
+
+trial_vol.spy_volume
 trial_vol.weekly_vix() #weekly_vix should be the target data set for when we run our tests.
