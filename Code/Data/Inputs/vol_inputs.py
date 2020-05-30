@@ -5,8 +5,8 @@ import os
 from Data.Inputs import volClass
 from Data.Inputs.FRED_data import convertFred
 from pandas_datareader import wb
-
-
+from sklearn.datasets import load_iris
+from sklearn import preprocessing
 
 
 
@@ -26,5 +26,3 @@ option_spreads_US
 convertFred.ConvertFred()
 
 ############### CONSIDER important exchange rates like chinese yuan USD, yen USD, EURO USD, etc. ###################
-
-convertFred

@@ -55,6 +55,7 @@ euroHighYieldOptionSpread.columns = ["BAMLHE00EHYIOAS"]
 euroHighYieldOptionSpread.head()
 euroHighYieldOptionSpread.shape
 
+
 fred.search('volume')
 
 
