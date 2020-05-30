@@ -1,10 +1,34 @@
 # Just using this for practice for the random forest classifier
 # This is from https://www.datacamp.com/community/tutorials/random-forests-classifier-python
-import os
-os.getcwd()
-
+from Data.Inputs import volClass
 from sklearn import datasets
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import metrics
+
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
+x = trial_vol.weekly_fred_data()
+x.shape
+y = trial_vol.weekly_vix() #weekly_vix should be the target data set for when we run our tests.
+y.shape
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
+
+x.isnull()
+print(x.head())
+
+#Create a Gaussian Classifier
+clf = RandomForestClassifier(n_estimators=10)
+
+#Train the model using the training sets y_pred=clf.predict(X_test)
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+
+print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+
 
 iris = datasets.load_iris()
 
@@ -27,18 +51,12 @@ data=pd.DataFrame({
 })
 data.head()
 
-# Import train_test_split function
-from sklearn.model_selection import train_test_split
-
 X=data[['sepal length', 'sepal width', 'petal length', 'petal width']]  # Features
 y=data['species']  # Labels
 
 # Split dataset into training set and test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
-
-#Import Random Forest Model
-from sklearn.ensemble import RandomForestClassifier
 
 #Create a Gaussian Classifier
 clf = RandomForestClassifier(n_estimators=10)
