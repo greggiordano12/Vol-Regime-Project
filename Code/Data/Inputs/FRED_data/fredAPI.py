@@ -27,11 +27,11 @@ highYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLH0A0HYM2", observation
 print(highYieldOptionSpread.head())
 
 # Gold fixing Price
-goldFixingPrice = pd.DataFrame(fred.get_series("GOLDAMGBD228NLBM", observation_start = "2000-01-04"))
+goldFixingPrice = pd.DataFrame(fred.get_series("GOLDAMGBD228NLBM", observation_start = "2000-01-03"))
 print(goldFixingPrice.head())
 
 # Corporate bond yields AAA
-corporateBondYield = pd.DataFrame(fred.get_series("DAAA", observation_start = "2000-01-04"))
+corporateBondYield = pd.DataFrame(fred.get_series("DAAA", observation_start = "2000-01-03"))
 print(corporateBondYield.head())
 
 # Overnight AA financial commercial paper interest rate
@@ -41,5 +41,6 @@ print(overnightPaperInterestRate.head())
 # Euro high yield index-option adjusted
 euroHighYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLHE00EHYIOAS", observation_start = "2000-01-03"))
 print(euroHighYieldOptionSpread.head())
+
 
 fred.search('volume')
