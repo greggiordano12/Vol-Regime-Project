@@ -129,20 +129,17 @@ class Vol_Data:
         input_df = self.weekly_spy_volume()
         for id in fred_ids:
             temp_df =  pd.DataFrame(fred.get_series(id, observation_start = self.start_date))
+            for i in range(len(temp_df.iloc[0:,0])):
+                if np.isnan(temp_df.iloc[0:,0][i]):
+                    try:
+                        temp_df.iloc[0:,0][i] = temp_df.iloc[0:,0][i-1]
+                    except:
+                        temp_df.iloc[0:,0][i] = temp_df.iloc[0:,0][i+1]
             avg_temp_data, temp_start_dates = self.weekly_stats(temp_df)
             temp_weekly_df = pd.DataFrame({"Week":temp_start_dates, id:avg_temp_data})
             temp_weekly_df = temp_weekly_df.set_index("Week")
             input_df = pd.concat([input_df, temp_weekly_df], axis = 1)
         return input_df
-
-
-
-
-
-
-
-
-
 
 
 
