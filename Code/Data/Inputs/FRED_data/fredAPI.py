@@ -19,19 +19,19 @@ icsa = pd.DataFrame(fred.get_series("ICSA", observation_start = "2000-01-01"))
 print(icsa.head())
 
 # Crude oil prices
-crudeOilEuro = pd.DataFrame(fred.get_series("DCOILBRENTEU", observation_start = "2000-01-03"))
+crudeOilEuro = pd.DataFrame(fred.get_series("DCOILBRENTEU", observation_start = "2000-01-01"))
 print(crudeOilEuro.head())
 
 # High yield index option adjusted spread
-highYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLH0A0HYM2", observation_start = "2000-01-03"))
+highYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLH0A0HYM2", observation_start = "2000-01-01"))
 print(highYieldOptionSpread.head())
 
 # Gold fixing Price
-goldFixingPrice = pd.DataFrame(fred.get_series("GOLDAMGBD228NLBM", observation_start = "2000-01-03"))
+goldFixingPrice = pd.DataFrame(fred.get_series("GOLDAMGBD228NLBM", observation_start = "2000-01-01"))
 print(goldFixingPrice.head())
 
 # Corporate bond yields AAA
-corporateBondYield = pd.DataFrame(fred.get_series("DAAA", observation_start = "2000-01-03"))
+corporateBondYield = pd.DataFrame(fred.get_series("DAAA", observation_start = "2000-01-01"))
 print(corporateBondYield.head())
 
 # Overnight AA financial commercial paper interest rate
@@ -39,7 +39,7 @@ overnightPaperInterestRate = pd.DataFrame(fred.get_series("RIFSPPFAAD01NB", obse
 print(overnightPaperInterestRate.head())
 
 # Euro high yield index-option adjusted
-euroHighYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLHE00EHYIOAS", observation_start = "2000-01-03"))
+euroHighYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLHE00EHYIOAS", observation_start = "2000-01-01"))
 print(euroHighYieldOptionSpread.head())
 
 
