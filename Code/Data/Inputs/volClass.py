@@ -69,8 +69,12 @@ class Vol_Data:
         data_dates = data_df.index
         drop_indicies = data_dates.difference(dates)
         data_df = data_df.drop(drop_indicies)
+        #### check to make sure market data exceeds fred data
+        new_dates = dates.difference(data_df.index)
+        self.dates = self.dates.drop(new_dates)
+        dates = self.dates
+        ###################################################
         data = data_df.iloc[0:,0]
-        print(data)
         i = 0
         while i<len(dates):
             temp_week = []
@@ -124,13 +128,11 @@ class Vol_Data:
         fred_ids = self.fred_strings
         input_df = self.weekly_spy_volume()
         for id in fred_ids:
-            print(id)
             temp_df =  pd.DataFrame(fred.get_series(id, observation_start = self.start_date))
             avg_temp_data, temp_start_dates = self.weekly_stats(temp_df)
-            temp_weekly_df = pd.DataFrame({"Week":temp_start_dates, id:temp_avg_data})
+            temp_weekly_df = pd.DataFrame({"Week":temp_start_dates, id:avg_temp_data})
             temp_weekly_df = temp_weekly_df.set_index("Week")
             input_df = pd.concat([input_df, temp_weekly_df], axis = 1)
-
         return input_df
 
 
