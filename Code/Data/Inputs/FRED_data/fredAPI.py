@@ -42,4 +42,4 @@ print(overnightPaperInterestRate.head())
 euroHighYieldOptionSpread = pd.DataFrame(fred.get_series("BAMLHE00EHYIOAS", observation_start = "2000-01-03"))
 print(euroHighYieldOptionSpread.head())
 
-fred.search('SP 500 volume')
+fred.search('volume')
