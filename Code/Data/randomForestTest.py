@@ -65,9 +65,6 @@ plt.show()
 
 
 
-
-
-
 clf.feature_importances_
 
 
