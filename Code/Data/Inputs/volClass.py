@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import datetime
 import calendar
 from fredapi import Fred
+import os
+os.getcwd()
 
 class Vol_Data:
 
@@ -126,7 +128,7 @@ class Vol_Data:
     def weekly_fred_data(self):
         fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
         fred_ids = self.fred_strings
-        input_df = self.weekly_spy_volume()
+        input_df = pd.DataFrame({}) #self.weekly_spy_volume()
         for id in fred_ids:
             temp_df =  pd.DataFrame(fred.get_series(id, observation_start = self.start_date))
             for i in range(len(temp_df.iloc[0:,0])):
@@ -139,14 +141,14 @@ class Vol_Data:
             temp_weekly_df = pd.DataFrame({"Week":temp_start_dates, id:avg_temp_data})
             temp_weekly_df = temp_weekly_df.set_index("Week")
             input_df = pd.concat([input_df, temp_weekly_df], axis = 1)
+        spy_dates = self.weekly_spy_volume().index
+        drop_indicies = input_df.index.difference(spy_dates)
+        spy_inputs = self.weekly_spy_volume().drop(drop_indicies)
+        input_df["SPY_Volume"] = self.weekly_spy_volume()["Weekly_Volume"]
         return input_df
 
 
-
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
-trial_vol.weekly_fred_data()
-
-
-trial_vol.spy_volume
-trial_vol.weekly_vix() #weekly_vix should be the target data set for when we run our tests.
+#
+# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+# trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
+# inputs_df = trial_vol.weekly_fred_data()
