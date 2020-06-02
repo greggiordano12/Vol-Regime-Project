@@ -126,6 +126,7 @@ class Vol_Data:
         return weekly_volume_avg
 
     def weekly_fred_data(self):
+        # May have to update to scan for the data frequency and then change it based on that.
         fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
         fred_ids = self.fred_strings
         input_df = pd.DataFrame({}) #self.weekly_spy_volume()
@@ -148,7 +149,6 @@ class Vol_Data:
         return input_df
 
 
-#
 # fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 # trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
 # inputs_df = trial_vol.weekly_fred_data()

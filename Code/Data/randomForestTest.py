@@ -11,7 +11,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas_datareader as pdr
 
 fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
@@ -22,40 +21,28 @@ y.shape
 
 
 x.tail()
-y.tail()
+y.head()
 
 x_lag = x.drop(pd.to_datetime('2020-05-26'))
 y_lag = y.drop(pd.to_datetime('2000-01-03'))
 
-
 X_train, X_test, y_train, y_test = train_test_split(x_lag, y_lag, test_size=0.3)
-
-
 
 #Create a Gaussian Classifier
 clf = RandomForestClassifier(n_estimators=10)
 
 #Train the model using the training sets y_pred=clf.predict(X_test)
-
-clf.fit(X_train, y_train)
+clf.fit(X_train, y_train.ravel())
 
 
 y_pred = clf.predict(X_test)
-
-y_test.loc[pd.to_datetime("2020-02-24")]
-
-pred_df = pd.DataFrame({"Week":y_test.index,"Predicted Vol Regime": y_pred})
-pred_df=pred_df.set_index("Week")
-pred_df.loc[pd.to_datetime("2020-02-24")]
-for i in y_test.index:
-
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 
 # Drop last row of input data and drop first row target data to create a lag
 # Feature importance
 
-clf.fit(X_train, y_train)
+clf.fit(X_train, y_train.ravel())
 importances = clf.feature_importances_
 clf.estimators_
 std = np.std([tree.feature_importances_ for tree in clf.estimators_], axis=0)
@@ -68,6 +55,7 @@ for f in range(X_train.shape[1]):
     print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
 
     # Plot the impurity-based feature importances of the forest
+col = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "VIX_Regime"]
 plt.figure()
 plt.title("Feature importances")
 plt.bar(range(X_train.shape[1]), importances[indices],
@@ -99,5 +87,3 @@ plt.xlabel('Relative Importance')
 plt.ylabel('Feature')
 plt.figure(figsize=(5,5))
 fig.set_size_inches(6.5, 4.5, forward=True)
-
-vix_df = pdr.DataReader("^VIX", "yahoo", "2020-01-01")
