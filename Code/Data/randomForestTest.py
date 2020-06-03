@@ -1,28 +1,18 @@
 from Code.Data.Inputs import volClass
-from sklearn import datasets
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn import preprocessing
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import roc_curve
-from sklearn.metrics import auc
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
-from sklearn.metrics import average_precision_score
-from inspect import signature
 
-
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU"]
 trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
 x = trial_vol.weekly_fred_data()
 x.shape
 y = trial_vol.weekly_vix() #weekly_vix should be the target data set for when we run our tests.
+x.corr()
+
 x.tail()
 y.head()
 
@@ -30,6 +20,8 @@ x_lag = x.drop(pd.to_datetime('2020-05-26'))
 x_lag = x_lag.drop(pd.to_datetime('2020-06-01'))
 y_lag = y.drop(pd.to_datetime('2000-01-03'))
 x_lag.shape
+y_lag.shape
+
 X_train, X_test, y_train, y_test = train_test_split(x_lag, y_lag, test_size=0.3)
 
 #Create a Gaussian Classifier
@@ -60,7 +52,7 @@ for f in range(X_train.shape[1]):
     print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
 
     # Plot the impurity-based feature importances of the forest
-col = ["Weekly Volume","DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "VIX_Regime"]
+col = x.columns
 plt.figure()
 plt.title("Feature importances")
 plt.bar(range(X_train.shape[1]), importances[indices],
@@ -70,12 +62,9 @@ plt.xlim([-1, X_train.shape[1]])
 plt.show()
 
 
-clf.feature_importances_
-
 
 # Need to doulbe check how feature_importances_ works and which features it corresponds to
-col = X_train.columns
-clf.feature_importances_
+col = x.columns
 y = clf.feature_importances_
 #plot
 fig, ax = plt.subplots()
