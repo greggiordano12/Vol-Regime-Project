@@ -23,7 +23,8 @@ class Regime_Predict:
         self.target_lag = self.target.iloc[:len(self.target["Weekly_Vol"])-1]
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.inputs_lag, self.target_lag, test_size = self.test_size )
         self.clf = RandomForestClassifier(n_estimators = self.n_estimators)
-        self.clf.fit(self.X_train, self.y_train)
+        self.y_train = self.y_train.to_numpy()
+        self.clf.fit(self.X_train, self.y_train.ravel())
         self.y_pred = self.clf.predict(self.X_test)
 
     def Regime_Accuracy(self):
