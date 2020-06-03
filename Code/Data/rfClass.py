@@ -30,9 +30,8 @@ class Regime_Predict:
         return metrics.accuracy_score(self.y_test, self.y_pred)
 
     def plot_feature_importances(self):
-        col = self.vol_data.fred_strings
+        col = self.inputs.columns
         y = self.clf.feature_importances_
-        y = np.delete(y, -1)
         fig, ax = plt.subplots()
         width = 0.4 # the width of the bars
         ind = np.arange(len(y)) # the x locations for the groups

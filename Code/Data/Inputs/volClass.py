@@ -149,6 +149,11 @@ class Vol_Data:
         return input_df
 
 
-# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-# trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
-# inputs_df = trial_vol.weekly_fred_data()
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
+inputs_df = trial_vol.weekly_fred_data()
+
+spy_volume = trial_vol.weekly_spy_volume()
+
+spy_volume.head()
+inputs_df.head()

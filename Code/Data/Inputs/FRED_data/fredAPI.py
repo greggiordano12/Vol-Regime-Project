@@ -27,7 +27,6 @@ fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
 # China/US FX rates - DEXCHUS - Daily
 # US/EURO EXchange rates - DEXUSEU - Daily
 
-df = fred.get_series_info("ICSA")
-df["frequency_short"] == "W"
-
+df = fred.get_series_info("BAMLHE00EHYIOAS")
+df["frequency_short"]
 fred.search('housing')
