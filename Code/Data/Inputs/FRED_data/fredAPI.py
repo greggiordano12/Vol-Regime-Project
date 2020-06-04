@@ -26,6 +26,10 @@ fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
 # Euro high yield index-option adjusted - BAMLHE00EHYIOAS - daily
 # China/US FX rates - DEXCHUS - Daily
 # US/EURO EXchange rates - DEXUSEU - Daily
+# 10 year - 3 month interest rate - T10Y3M - Daily
+# private sector financial EM data - BAMLEMFSFCRPITRIV - DAILY
+# Trade weighted dollar to foreign goods and currencies - DTWEXAFEGS - DAILY, ONLY GOES BACK TO 2015
+
 
 df = fred.get_series_info("BAMLHE00EHYIOAS")
 df["frequency_short"]

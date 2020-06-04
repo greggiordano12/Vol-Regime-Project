@@ -38,7 +38,7 @@ clf.fit(X_train, y_train.ravel())
 y_prob = clf.predict_proba(X_test)
 y_pred = clf.predict(X_test)
 
-y_prob 
+y_prob
 y_pred
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
@@ -47,7 +47,6 @@ print(rfc_cv_score.mean())
 # Feature importance
 
 importances = clf.feature_importances_
-clf.estimators_
 std = np.std([tree.feature_importances_ for tree in clf.estimators_], axis=0)
 indices = np.argsort(importances)[::-1]
 
