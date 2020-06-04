@@ -23,7 +23,8 @@ class Regime_Predict:
         self.target_lag = self.target.iloc[:len(self.target["Weekly_Vol"])-1]
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.inputs_lag, self.target_lag, test_size = self.test_size )
         self.clf = RandomForestClassifier(n_estimators = self.n_estimators)
-        self.clf.fit(self.X_train, self.y_train)
+        self.y_train = self.y_train.to_numpy()
+        self.clf.fit(self.X_train, self.y_train.ravel())
         self.y_pred = self.clf.predict(self.X_test)
 
     def Regime_Accuracy(self):
@@ -48,10 +49,19 @@ class Regime_Predict:
 
 
 
+<<<<<<< HEAD
 # fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 # trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
 # #
 # trial_regime_predict = Regime_Predict(trial_vol)
+=======
+
+
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
+#
+trial_regime_predict = Regime_Predict(trial_vol)
+>>>>>>> 5207311ad854a903b78465fadba2271d217a2e77
 #
 # trial_regime_predict.Regime_Accuracy()
 # trial_regime_predict.plot_feature_importances()

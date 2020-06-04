@@ -5,12 +5,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import confusion_matrix, classification_report
 
 fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU"]
 trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
 x = trial_vol.weekly_fred_data()
 x.shape
 y = trial_vol.weekly_vix() #weekly_vix should be the target data set for when we run our tests.
+y.shape
 x.corr()
 
 x.tail()
@@ -25,18 +28,21 @@ y_lag.shape
 X_train, X_test, y_train, y_test = train_test_split(x_lag, y_lag, test_size=0.3)
 
 #Create a Gaussian Classifier
-clf = RandomForestClassifier(n_estimators=100)
+clf = RandomForestClassifier(n_estimators=200, max_depth = 140, max_features = 'sqrt')
 
 # Convert Y to an array because that is how the RF needs the data to be
 y_train = y_train.to_numpy()
 
 #Train the model using the training sets y_pred=clf.predict(X_test)
 clf.fit(X_train, y_train.ravel())
-
+y_prob = clf.predict_proba(X_test)
 y_pred = clf.predict(X_test)
 
-print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+y_prob
+y_pred
 
+print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+print(rfc_cv_score.mean())
 # Drop last row of input data and drop first row target data to create a lag
 # Feature importance
 
@@ -86,3 +92,45 @@ df.plot(kind='bar',figsize=(16,10))
 plt.grid(which='major', linestyle='-', linewidth='0.5', color='green')
 plt.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
 plt.show()
+
+y_lag = y_lag.to_numpy()
+y_lag.shape
+y_lag = y_lag.ravel()
+type(y_lag)
+rfc_cv_score = cross_val_score(clf, x_lag, y_lag, cv=10)
+
+
+print(confusion_matrix(y_test, y_pred))
+
+
+print(classification_report(y_test, y_pred))
+
+
+print(rfc_cv_score.mean())
+
+
+
+
+from sklearn.model_selection import RandomizedSearchCV
+# number of trees in random forest
+n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]
+# number of features at every split
+max_features = ['auto', 'sqrt']
+
+# max depth
+max_depth = [int(x) for x in np.linspace(100, 500, num = 11)]
+max_depth.append(None)
+# create random grid
+random_grid = {
+ 'n_estimators': n_estimators,
+ 'max_features': max_features,
+ 'max_depth': max_depth
+ }
+# Random search of parameters
+rfc_random = RandomizedSearchCV(estimator = clf, param_distributions = random_grid, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+# Fit the model
+y_train = y_train.to_numpy()
+
+rfc_random.fit(X_train, y_train.ravel())
+# print results
+print(rfc_random.best_params_)
