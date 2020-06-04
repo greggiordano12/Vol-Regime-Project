@@ -30,6 +30,7 @@ class Regime_Predict:
         return metrics.accuracy_score(self.y_test, self.y_pred)
 
     def plot_feature_importances(self):
+
         col = self.inputs.columns
         y = self.clf.feature_importances_
         fig, ax = plt.subplots()
@@ -49,7 +50,8 @@ class Regime_Predict:
 
 # fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 # trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
-#
+# #
 # trial_regime_predict = Regime_Predict(trial_vol)
 #
+# trial_regime_predict.Regime_Accuracy()
 # trial_regime_predict.plot_feature_importances()

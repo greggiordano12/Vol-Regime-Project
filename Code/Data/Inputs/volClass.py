@@ -106,11 +106,11 @@ class Vol_Data:
         weekly_vol_regimes = []
         for temp_avg_vol in avg_vol_data:
             if temp_avg_vol <20:
-                weekly_vol_regimes.append(1)
+                weekly_vol_regimes.append(-1)
             elif temp_avg_vol > 30:
-                weekly_vol_regimes.append(3)
+                weekly_vol_regimes.append(1)
             else:
-                weekly_vol_regimes.append(2)
+                weekly_vol_regimes.append(0)
 
         week_dic = {"Date":week_start_dates}
         weekly_vol_regimes = pd.DataFrame({"Week":week_start_dates,"Weekly_Vol":weekly_vol_regimes})
@@ -149,11 +149,14 @@ class Vol_Data:
         return input_df
 
 
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
-inputs_df = trial_vol.weekly_fred_data()
+# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+# trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
+# inputs_df = trial_vol.weekly_fred_data()
 
-spy_volume = trial_vol.weekly_spy_volume()
 
-spy_volume.head()
-inputs_df.head()
+
+
+# spy_volume = trial_vol.weekly_spy_volume()
+#
+# spy_volume.head()
+# inputs_df.head()
