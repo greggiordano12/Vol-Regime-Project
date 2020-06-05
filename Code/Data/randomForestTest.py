@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix, classification_report
 
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU"]
+fred_s = ["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]
 trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
 x = trial_vol.weekly_fred_data()
 x.shape
@@ -17,14 +17,14 @@ y.shape
 x.corr()
 
 x.tail()
-y.head()
+y.tail()
 
-x_lag = x.drop(pd.to_datetime('2020-05-26'))
-x_lag = x_lag.drop(pd.to_datetime('2020-06-01'))
+x_lag = x.drop(pd.to_datetime('2020-06-01'))
 y_lag = y.drop(pd.to_datetime('2000-01-03'))
 x_lag.shape
 y_lag.shape
 
+x_lag
 X_train, X_test, y_train, y_test = train_test_split(x_lag, y_lag, test_size=0.3)
 
 #Create a Gaussian Classifier
