@@ -49,19 +49,10 @@ class Regime_Predict:
 
 
 
-<<<<<<< HEAD
 # fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 # trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
 # #
 # trial_regime_predict = Regime_Predict(trial_vol)
-=======
-
-
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
-#
-trial_regime_predict = Regime_Predict(trial_vol)
->>>>>>> 5207311ad854a903b78465fadba2271d217a2e77
 #
 # trial_regime_predict.Regime_Accuracy()
 # trial_regime_predict.plot_feature_importances()
