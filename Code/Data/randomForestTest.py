@@ -19,7 +19,11 @@ x.corr()
 x.tail()
 y.tail()
 
+<<<<<<< HEAD
 x_lag = x.drop(pd.to_datetime('2020-06-01'))
+=======
+x_lag = x.drop(pd.to_datetime('2020-05-26'))
+>>>>>>> 6b73cf9303d37c7ebf8f2761738ce989be31f2a7
 y_lag = y.drop(pd.to_datetime('2000-01-03'))
 x_lag.shape
 y_lag.shape
@@ -36,9 +40,14 @@ y_train = y_train.to_numpy()
 #Train the model using the training sets y_pred=clf.predict(X_test)
 clf.fit(X_train, y_train.ravel())
 y_prob = clf.predict_proba(X_test)
-y_pred = clf.predict(X_test)
 
 y_prob
+<<<<<<< HEAD
+=======
+y_pred = clf.predict(X_test)
+.0
+y_prob
+>>>>>>> 6b73cf9303d37c7ebf8f2761738ce989be31f2a7
 y_pred
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
