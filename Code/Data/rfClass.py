@@ -19,13 +19,21 @@ class Regime_Predict:
         self.n_estimators = n_estimators
         self.inputs = vol_data.weekly_fred_data()
         self.target = vol_data.weekly_vix()
-        self.inputs_lag = self.inputs.iloc[1:]
-        self.target_lag = self.target.iloc[:len(self.target["Weekly_Vol"])-1]
+        self.inputs_lag = self.inputs.iloc[:len(self.target["Weekly_Vol"])-1]
+        self.target_lag = self.target.iloc[1:]
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.inputs_lag, self.target_lag, test_size = self.test_size )
         self.clf = RandomForestClassifier(n_estimators = self.n_estimators)
         self.y_train = self.y_train.to_numpy()
         self.clf.fit(self.X_train, self.y_train.ravel())
+
         self.y_pred = self.clf.predict(self.X_test)
+        self.all_predictions = self.clf.predict(self.inputs_lag)
+        all_predictions_df = pd.DataFrame({"Week":self.target_lag.index, "Vol_Regime":self.all_predictions})
+        self.all_predictions_df = all_predictions_df.set_index("Week")
+        self.all_prob = pd.DataFrame(self.clf.predict_proba(self.inputs_lag))
+        self.all_prob.columns = ["Low_Vol", "Med_Vol", "High_Vol"]
+        self.all_prob["Week"] = self.target_lag.index
+        self.all_prob = self.all_prob.set_index("Week")
 
     def Regime_Accuracy(self):
         return metrics.accuracy_score(self.y_test, self.y_pred)
@@ -53,6 +61,15 @@ class Regime_Predict:
 # trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
 # #
 # trial_regime_predict = Regime_Predict(trial_vol)
+# trial_regime_predict.all_prob
+# trial_regime_predict.inputs_lag
+# trial_regime_predict.target_lag
+
+# trial_regime_predict.all_prob.loc[pd.to_datetime("2000-01-03")][2]
 #
 # trial_regime_predict.Regime_Accuracy()
 # trial_regime_predict.plot_feature_importances()
+# regime_data = trial_regime_predict.all_predictions_df
+#
+#
+#regime_data

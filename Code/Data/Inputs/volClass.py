@@ -81,6 +81,13 @@ class Vol_Data:
         while i<len(dates):
             temp_week = []
             temp_week_day = []
+            if dates[i].weekday() in (5,6):
+                if dates[i].weekday() == 5:
+                    i+=2
+                else:
+                    i+=1
+            if i >= len(dates):
+                break
             temp_week_day.append(dates[i].weekday()) # adding start of the week day
             week_start_dates.append(dates[i]) # adding the start date to dates list
             temp_week.append(data[i]) # add the closing price of the start of the week
@@ -88,6 +95,9 @@ class Vol_Data:
             if i < len(dates):
                 while (dates[i].weekday() not in temp_week_day) and (dates[i].weekday() != 0):
                     # This while loop gathers data for current week. Adjusts for weeks that have Mondays off.
+                    if dates[i].weekday() in (5,6):
+                        i+=1
+                        continue
                     temp_week.append(data[i])
                     temp_week_day.append(dates[i].weekday())
                     i+=1
@@ -150,13 +160,12 @@ class Vol_Data:
 
 
 # fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-# trial_vol = Vol_Data("2000-01-01", fred_strings = fred_s)
+# trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
 # inputs_df = trial_vol.weekly_fred_data()
+# #
+# # #
+# inputs_df.loc[pd.to_datetime("2018-12-20"):]
 
-
-
-
-# spy_volume = trial_vol.weekly_spy_volume()
 #
 # spy_volume.head()
 # inputs_df.head()
