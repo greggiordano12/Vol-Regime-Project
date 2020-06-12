@@ -87,7 +87,7 @@ def max_sharpe_ratio(rmat):
     bound = (-1,1)
     bounds = tuple(bound for asset in range(num_assets))
     initial_guess = np.array(num_assets*[1./num_assets,]) #first guess is equal weight
-    result = sco.minimize(vol, initial_guess , args=args,
+    result = sco.minimize(neg_sharpe_ratio, initial_guess , args=args,
                         method='SLSQP', bounds=bounds, constraints=constraints) #just need to change first paramter
     return result
 
@@ -194,14 +194,14 @@ class Portfolio:
 
             num_assets = len(self.bull_tickers)
             temp_bull_optweights = np.array(num_assets*[1./num_assets,])
-            temp_bear_optweights = max_sharpe_ratio(temp_bear_portfolio_lag)["x"]
+            temp_bear_optweights = max_sharpe_ratio(temp_bull_portfolio_lag)["x"] #change back to temp_bear_portfolio_lag
 
             all_weights_bull = all_weights_bull + [temp_bull_optweights.tolist()]
             all_weights_bear = all_weights_bear + [temp_bear_optweights.tolist()]
 
             bull_returns_vec = returns_vector(temp_bull_portfolio, temp_bull_optweights) * temp_probs[0]
-            bear_returns_vec = returns_vector(temp_bear_portfolio, temp_bear_optweights) * temp_probs[2]
-            med_returns_vec = (returns_vector(temp_bull_portfolio, temp_bull_optweights) * .5).add((returns_vector(temp_bear_portfolio, temp_bear_optweights)*.5)) * temp_probs[1]
+            bear_returns_vec = returns_vector(temp_bull_portfolio, temp_bear_optweights) * temp_probs[2]# changed back to bear
+            med_returns_vec = (returns_vector(temp_bull_portfolio, temp_bull_optweights) * .5).add((returns_vector(temp_bull_portfolio, temp_bear_optweights)*.5)) * temp_probs[1] # changed back to bear
 
             weekly_returns_vec = (bull_returns_vec.add(bear_returns_vec)).add(med_returns_vec)
             daily_returns+= list(weekly_returns_vec)
@@ -224,13 +224,10 @@ class Portfolio:
 fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 trial_vol = volClass.Vol_Data("2010-12-21", fred_strings = fred_s)
 trial_regime_predict = rfClass.Regime_Predict(trial_vol)
-trial_regime_predict.all_prob
 
 trial_port = Portfolio(start_date="2010-12-20", regime_predict=trial_regime_predict)
-trial_port.daily_bull_rmat
-["GDX", "VXX", "SHY", "XLU", "VHT", "UUP", "PNQI"]
-help_pls = trial_port.weekly_optimization()
-help_pls.dropna()
+trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
+opt_daily_data = trial_port.weekly_optimization()
 annual_vol = np.sqrt(help_pls.var()) * np.sqrt(252)
 annual_return = np.mean(help_pls.mean())*252
 
@@ -239,60 +236,9 @@ annual_vol
 ((help_pls+1).cumprod()-1).plot()
 
 
-help_pls.tail(80).cumsum().plot()
+
 
 help_pls.to_csv("Optimization_returns.csv")
 trial_port.daily_bear_rmat.to_csv("bear_portfolio_returns.csv")
 trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
 trial_port.regime_predict.all_prob.to_csv("regime_probs.csv")
-#portfolio_variance(rmat, np.array([1/len(trial_port.bull_tickers) for i in trial_port.bull_tickers]))
-
-
-### trying functions
-
-##################### This indexing is important and how I will create backtest by isolating each week ##################
-week_starts = weekly_r.index
-rmat.loc[week_starts[0]:week_starts[1]].drop(week_starts[1], axis = 0)
-############################################################################################################
-
-
-rmeans=np.array(rmat.mean(axis = 0))
-weights = np.array([1/len(trial_port.bull_tickers) for i in trial_port.bull_tickers])
-
-weights.shape
-rmeans.shape
-len(rmat.iloc[0:,0])
-num_assets=len(rmat.columns)
-w = np.array(num_assets*[1./num_assets,])
-portfolio_return(rmat, w)
-neg_sharpe_ratio(rmat, w)
-portfolio_variance(rmat,w)
-week_starts[0] < week_starts[1]
-list(week_starts).index(week_starts[1])
-
-rmat_bull = returns_matrix(["PNQI", "SPY", "XLK", "SPXL", "TQQQ", "XLY", "XLF"], "2000-01-01", "2020-06-04")
-rmat_bear = returns_matrix(["GDX", "VXX", "SHY", "UUP", "PNQI"], "2000-01-01", "2020-06-04")
-
-temp=pdr.DataReader("^VIX","yahoo", "2000-01-01")
-
-
-dates = trial_port.bull_weekly_return().index
-######################### Need to adjust here!!!!
-drop_index = list(trial_port.regime_predict.all_predictions_df.index).index(dates[1])
-drop_index
-regime_df, probs_df = regime_df.drop(regime_df.index[:drop_index]), probs_df.drop(probs_df.index[:(drop_index-1)])
-
-x=np.array([1,2,3])
-rmat = returns_matrix(["SPXL"], "2010-12-26","2012-01-01")
-rets=returns_vector(rmat,[1])
-rets
-
-bull_returns_vec = returns_vector(rmat, [1]) * .75
-bear_returns_vec = returns_vector(rmat, [.5]) * .2
-med_returns_vec = (returns_vector(rmat, [1]) * .5).add((returns_vector(rmat, [.5])*.5)) * .05
-
-weekly_returns_vec = (bull_returns_vec.add(bear_returns_vec)).add(med_returns_vec)
-weekly_returns_vec.cumsum().plot()
-help_pls.cumsum().head(10) - 0.000843
-
-help_pls.cumsum()
