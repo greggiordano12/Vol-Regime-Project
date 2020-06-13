@@ -9,22 +9,17 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix, classification_report
 
 fred_s = ["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]
-trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
+trial_vol = volClass.Vol_Data("2007-01-01",end_date = "2020-06-01", fred_strings = fred_s)
 x = trial_vol.weekly_fred_data()
 x.shape
-y = trial_vol.weekly_vix() #weekly_vix should be the target data set for when we run our tests.
+y = trial_vol.weekly_vix() # weekly_vix should be the target data set for when we run our tests.
 y.shape
 x.corr()
 
 x.tail()
-y.tail()
-
-<<<<<<< HEAD
+y.head()
 x_lag = x.drop(pd.to_datetime('2020-06-01'))
-=======
-x_lag = x.drop(pd.to_datetime('2020-05-26'))
->>>>>>> 6b73cf9303d37c7ebf8f2761738ce989be31f2a7
-y_lag = y.drop(pd.to_datetime('2000-01-03'))
+y_lag = y.drop(pd.to_datetime('2007-01-03'))
 x_lag.shape
 y_lag.shape
 
@@ -42,13 +37,7 @@ clf.fit(X_train, y_train.ravel())
 y_prob = clf.predict_proba(X_test)
 
 y_prob
-<<<<<<< HEAD
-=======
 y_pred = clf.predict(X_test)
-.0
-y_prob
->>>>>>> 6b73cf9303d37c7ebf8f2761738ce989be31f2a7
-y_pred
 
 print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 print(rfc_cv_score.mean())

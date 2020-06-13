@@ -21,6 +21,10 @@ class Vol_Data:
         self.spy_df = pdr.DataReader("SPY", "yahoo", start_date, end_date)
         self.spy_volume = self.spy_df.Volume
         self.spy_volume_arr = np.array(self.spy_volume)
+        self.gold_df = pdr.DataReader("GDX", "yahoo", start_date, end_date)
+        self.gold_volume = self.gold_df.Volume
+        self.bond_df = pdr.DataReader("SHY", "yahoo", start_date, end_date)
+        self.bond_volume = self.bond_df.Volume
         self.fred_strings = fred_strings
 
 
@@ -115,7 +119,7 @@ class Vol_Data:
         avg_vol_data, week_start_dates = self.weekly_stats(pd.DataFrame(self.vix_close))
         weekly_vol_regimes = []
         for temp_avg_vol in avg_vol_data:
-            if temp_avg_vol <20:
+            if temp_avg_vol < 20:
                 weekly_vol_regimes.append(-1)
             elif temp_avg_vol > 30:
                 weekly_vol_regimes.append(1)
@@ -131,7 +135,21 @@ class Vol_Data:
         #outputs dataframe of weekly spy volume averages with index as start of week
         avg_volume_data, week_start_dates = self.weekly_stats(pd.DataFrame(self.spy_volume))
         week_dic = {"Date":week_start_dates}
-        weekly_volume_avg = pd.DataFrame({"Week":week_start_dates,"Weekly_Volume":avg_volume_data})
+        weekly_volume_avg = pd.DataFrame({"Week":week_start_dates, "Weekly_Volume":avg_volume_data})
+        weekly_volume_avg = weekly_volume_avg.set_index("Week")
+        return weekly_volume_avg
+
+    def weekly_gold_volume(self):
+        avg_volume_data, week_start_dates = self.weekly_stats(pd.DataFrame(self.gold_volume))
+        week_dic = {"Date":week_start_dates}
+        weekly_volume_avg = pd.DataFrame({"Week":week_start_dates, "Weekly_Volume":avg_volume_data})
+        weekly_volume_avg = weekly_volume_avg.set_index("Week")
+        return weekly_volume_avg
+
+    def weekly_bond_volume(self):
+        avg_volume_data, week_start_dates = self.weekly_stats(pd.DataFrame(self.bond_volume))
+        week_dic = {"Date":week_start_dates}
+        weekly_volume_avg = pd.DataFrame({"Week":week_start_dates, "Weekly_Volume":avg_volume_data})
         weekly_volume_avg = weekly_volume_avg.set_index("Week")
         return weekly_volume_avg
 
@@ -156,12 +174,19 @@ class Vol_Data:
         drop_indicies = input_df.index.difference(spy_dates)
         spy_inputs = self.weekly_spy_volume().drop(drop_indicies)
         input_df["SPY_Volume"] = self.weekly_spy_volume()["Weekly_Volume"]
+        input_df["SHY_Volume"] = self.weekly_bond_volume()["Weekly_Volume"]
+        input_df["GDX_Volume"] = self.weekly_gold_volume()["Weekly_Volume"]
         return input_df
 
 
-# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-# trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
-# inputs_df = trial_vol.weekly_fred_data()
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
+inputs_df = trial_vol.weekly_fred_data()
+inputs_df.head()
+y = trial_vol.weekly_vix()
+y.head()
+
+y
 # #
 # # #
 # inputs_df.loc[pd.to_datetime("2018-12-20"):]

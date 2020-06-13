@@ -2,7 +2,18 @@
 # you should be good to run it thru my api_key
 from fredapi import Fred
 import pandas as pd
+import pandas_datareader.data as pdr
 fred = Fred(api_key = '81fb59583aa03d2ce139e065d694c299')
+
+
+
+stocks = ["SPY", "AAPL", "MSFT"]
+input_df = pd.DataFrame({})
+for id in stocks:
+    temp_df = pdr.DataReader(id, "yahoo", start = "2018-01-01")
+    pd.concat(input_df, pd.DataFrame(temp_df.Volume))
+ptype(temp_df.Volume)
+temp_df.head()
 
 # input variables - looking for weekly
 # stock market volume
