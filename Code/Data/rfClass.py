@@ -2,7 +2,6 @@ import os
 os.getcwd()
 
 from Code.Data.Inputs import volClass
-from sklearn import datasets
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -57,19 +56,19 @@ class Regime_Predict:
 
 
 
-# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-# trial_vol = volClass.Vol_Data("2000-01-01", fred_strings = fred_s)
-# #
-# trial_regime_predict = Regime_Predict(trial_vol)
-# trial_regime_predict.all_prob
-# trial_regime_predict.inputs_lag
-# trial_regime_predict.target_lag
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "T10Y3M", "BAMLEMFSFCRPITRIV"]
+trial_vol = volClass.Vol_Data("2007-01-01", fred_strings = fred_s)
+#
+trial_regime_predict = Regime_Predict(trial_vol)
+trial_regime_predict.all_prob
+trial_regime_predict.inputs_lag
+trial_regime_predict.target_lag
 
-# trial_regime_predict.all_prob.loc[pd.to_datetime("2000-01-03")][2]
-#
-# trial_regime_predict.Regime_Accuracy()
-# trial_regime_predict.plot_feature_importances()
-# regime_data = trial_regime_predict.all_predictions_df
-#
-#
-#regime_data
+trial_regime_predict.all_prob.loc[pd.to_datetime("2007-01-08")][2]
+
+trial_regime_predict.Regime_Accuracy()
+trial_regime_predict.plot_feature_importances()
+regime_data = trial_regime_predict.all_predictions_df
+
+
+regime_data

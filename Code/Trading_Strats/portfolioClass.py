@@ -222,12 +222,15 @@ class Portfolio:
 
 ##### REAL TEST ########
 fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-trial_vol = volClass.Vol_Data("2010-12-21", fred_strings = fred_s)
+trial_vol = volClass.Vol_Data("2010-12-21", "2020-06-01", fred_strings = fred_s)
 trial_regime_predict = rfClass.Regime_Predict(trial_vol)
 
 trial_port = Portfolio(start_date="2010-12-20", regime_predict=trial_regime_predict)
 trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
 opt_daily_data = trial_port.weekly_optimization()
+annual_vol = np.sqrt(trial_port.var()) * np.sqrt(252)
+annual_return = np.mean(trial_port.mean())*252
+
 annual_vol = np.sqrt(help_pls.var()) * np.sqrt(252)
 annual_return = np.mean(help_pls.mean())*252
 
