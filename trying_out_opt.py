@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import pandas_datareader.data as pdr
 import scipy.optimize as sco
+import os
 
 regime_probs=pd.read_csv("regime_probs.csv")
 regime_probs = regime_probs.set_index("Week")
@@ -121,12 +122,22 @@ opt_returns=opt_returns.dropna()
 or_weekly=weekly_data(opt_returns["Return"])
 or_weekly.tail(20)
 
+
 SPY_data.index = pd.to_datetime(SPY_data.index)
+
 spy_weekly = weekly_data(SPY_data)
 ((spy_weekly["Returns"]+1).cumprod()-1).plot()
 
 annual_vol = np.sqrt(SPY_data.var()) * np.sqrt(252)
 annual_return = np.mean(SPY_data.mean())*252
-
-annual_return
 annual_vol
+annual_return
+
+
+corona_virus = or_weekly.loc[pd.to_datetime("2018-10-01"):pd.to_datetime("2019-01-10")]["Returns"]
+spy_weekly_corona = spy_weekly.loc[pd.to_datetime("2018-10-01"):pd.to_datetime("2019-01-10")]["Returns"]
+np.sqrt(spy_weekly_corona.var())*np.sqrt(52)
+np.mean(spy_weekly_corona)*52
+
+np.sqrt(corona_virus.var())*np.sqrt(52)
+np.mean(corona_virus)*52

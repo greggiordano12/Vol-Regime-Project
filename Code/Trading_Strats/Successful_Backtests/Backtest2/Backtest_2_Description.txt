@@ -1,0 +1,13 @@
+bear_tickers=bull_tickers = ["PNQI", "SPY", "XLK", "SPXL", "TQQQ", "XLY", "XLF","SHY"]
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = volClass.Vol_Data("2000-12-21", fred_strings = fred_s)
+trial_regime_predict = rfClass.Regime_Predict(trial_vol)
+
+This function uses min vol optimization during times of med/high vol
+for bear portfolio and equally weights bull portfolio during low vol times.
+
+trial_port = Portfolio(start_date="2010-12-20", end_date="2020-06-07",regime_predict=trial_regime_predict)
+
+Annual Return: 20.18%
+Annual Vol: 15.45%
+

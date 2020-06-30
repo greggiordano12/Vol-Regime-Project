@@ -4,6 +4,8 @@ import pandas_datareader.data as pdr
 import scipy.optimize as sco
 from Code.Data.Inputs import volClass
 from Code.Data import rfClass
+
+
 def returns_matrix(tickers, start_date, end_date):
     #NEED TO CHANGE FOR FACT THAT TICKERS HAVE VERY DIFFERENT DATA THAT THEY GO BACK TO#
     '''
@@ -87,7 +89,7 @@ def max_sharpe_ratio(rmat):
     bound = (-1,1)
     bounds = tuple(bound for asset in range(num_assets))
     initial_guess = np.array(num_assets*[1./num_assets,]) #first guess is equal weight
-    result = sco.minimize(neg_sharpe_ratio, initial_guess , args=args,
+    result = sco.minimize(vol, initial_guess , args=args,
                         method='SLSQP', bounds=bounds, constraints=constraints) #just need to change first paramter
     return result
 
@@ -194,14 +196,14 @@ class Portfolio:
 
             num_assets = len(self.bull_tickers)
             temp_bull_optweights = np.array(num_assets*[1./num_assets,])
-            temp_bear_optweights = max_sharpe_ratio(temp_bull_portfolio_lag)["x"] #change back to temp_bear_portfolio_lag
+            temp_bear_optweights = max_sharpe_ratio(temp_bear_portfolio_lag)["x"] #change back to temp_bear_portfolio_lag
 
             all_weights_bull = all_weights_bull + [temp_bull_optweights.tolist()]
             all_weights_bear = all_weights_bear + [temp_bear_optweights.tolist()]
 
             bull_returns_vec = returns_vector(temp_bull_portfolio, temp_bull_optweights) * temp_probs[0]
-            bear_returns_vec = returns_vector(temp_bull_portfolio, temp_bear_optweights) * temp_probs[2]# changed back to bear
-            med_returns_vec = (returns_vector(temp_bull_portfolio, temp_bull_optweights) * .5).add((returns_vector(temp_bull_portfolio, temp_bear_optweights)*.5)) * temp_probs[1] # changed back to bear
+            bear_returns_vec = returns_vector(temp_bear_portfolio, temp_bear_optweights) * temp_probs[2]# changed back to bear
+            med_returns_vec = returns_vector(temp_bear_portfolio, temp_bear_optweights) * temp_probs[1] # changed back to bear
 
             weekly_returns_vec = (bull_returns_vec.add(bear_returns_vec)).add(med_returns_vec)
             daily_returns+= list(weekly_returns_vec)
@@ -220,28 +222,31 @@ class Portfolio:
         return daily_rmat
 
 
-##### REAL TEST ########
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-trial_vol = volClass.Vol_Data("2010-12-21", "2020-06-01", fred_strings = fred_s)
-trial_regime_predict = rfClass.Regime_Predict(trial_vol)
-
-trial_port = Portfolio(start_date="2010-12-20", regime_predict=trial_regime_predict)
-trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
-opt_daily_data = trial_port.weekly_optimization()
-annual_vol = np.sqrt(trial_port.var()) * np.sqrt(252)
-annual_return = np.mean(trial_port.mean())*252
-
-annual_vol = np.sqrt(help_pls.var()) * np.sqrt(252)
-annual_return = np.mean(help_pls.mean())*252
-
-annual_return
-annual_vol
-((help_pls+1).cumprod()-1).plot()
-
-
-
-
-help_pls.to_csv("Optimization_returns.csv")
-trial_port.daily_bear_rmat.to_csv("bear_portfolio_returns.csv")
-trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
-trial_port.regime_predict.all_prob.to_csv("regime_probs.csv")
+##### REAL TEST ######## Run all code below to test
+# fred_s = ["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]
+# trial_vol = volClass.Vol_Data("2007-12-21", "2020-06-14", fred_strings = fred_s)
+# trial_regime_predict = rfClass.Regime_Predict(trial_vol)
+#
+# returns_matrix(bear_tickers,start_date="2010-12-20", end_date="2020-06-07")
+#
+# trial_port = Portfolio(start_date="2008-01-01", end_date="2020-06-14",bull_tickers = ["PNQI", "SPY", "XLK", "SPXL", "XLY", "XLF","SHY"], bear_tickers= ["PNQI", "SPY", "XLK", "SPXL", "XLY", "XLF","SHY"] ,regime_predict=trial_regime_predict)
+# trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
+# opt_daily  = trial_port.weekly_optimization()
+#
+# annual_vol = np.sqrt(opt_daily.var()) * np.sqrt(252)
+# annual_return = np.mean(opt_daily.mean())*252
+#
+# annual_return
+# annual_vol
+# ((opt_daily+1).cumprod()-1).plot()
+#
+#
+#
+#
+# opt_daily.to_csv("Optimization_returns.csv")
+# trial_port.daily_bear_rmat.to_csv("bear_portfolio_returns.csv")
+# trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
+# trial_port.regime_predict.all_prob.to_csv("regime_probs.csv")
+#
+#
+# bear_tickers= ["PNQI", "SPY", "XLK", "SPXL", "TQQQ", "XLY", "XLF","SHY"]
