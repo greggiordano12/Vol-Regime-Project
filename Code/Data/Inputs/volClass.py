@@ -179,14 +179,14 @@ class Vol_Data:
         return input_df
 
 
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
-trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
-inputs_df = trial_vol.weekly_fred_data()
-inputs_df.head()
-y = trial_vol.weekly_vix()
-y.head()
+# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+# trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
+# inputs_df = trial_vol.weekly_fred_data()
+# inputs_df.head()
+# y = trial_vol.weekly_vix()
+# y.head()
 
-y
+# y
 # #
 # # #
 # inputs_df.loc[pd.to_datetime("2018-12-20"):]
