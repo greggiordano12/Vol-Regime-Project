@@ -9,7 +9,7 @@ from Code.Data import rfClass
 def returns_matrix(tickers, start_date, end_date):
     #NEED TO CHANGE FOR FACT THAT TICKERS HAVE VERY DIFFERENT DATA THAT THEY GO BACK TO#
     '''
-    Creates a daily returs dataframe where each column is a different stock
+    Creates a daily returns dataframe where each column is a different stock
     '''
     min_week = pd.to_datetime("1900-01-01") #sets initial week as today
     rmat = []
@@ -77,7 +77,7 @@ def ret(weights, rmat):
     p_ret = portfolio_return(rmat, weights) * len(rmat.iloc[0:,0])
     return -p_ret
 
-def max_sharpe_ratio(rmat):
+def min_vol(rmat):
     '''
     Uses optimization techniques to output the optimal weight vector for max sharpe ratio
     rmat: returns matrix where each column is a different stock's returns
@@ -157,7 +157,7 @@ class Portfolio:
         return final
 
     def bull_optimal_weights(self):
-        return max_sharpe_ratio(self.daily_bull_rmat)["x"]
+        return min_vol(self.daily_bull_rmat)["x"]
 
 
     def weekly_optimization(self):
@@ -196,7 +196,7 @@ class Portfolio:
 
             num_assets = len(self.bull_tickers)
             temp_bull_optweights = np.array(num_assets*[1./num_assets,])
-            temp_bear_optweights = max_sharpe_ratio(temp_bear_portfolio_lag)["x"] #change back to temp_bear_portfolio_lag
+            temp_bear_optweights = min_vol(temp_bear_portfolio_lag)["x"] #change back to temp_bear_portfolio_lag
 
             all_weights_bull = all_weights_bull + [temp_bull_optweights.tolist()]
             all_weights_bear = all_weights_bear + [temp_bear_optweights.tolist()]
@@ -224,18 +224,18 @@ class Portfolio:
 
 ##### REAL TEST ######## Run all code below to test
 # fred_s = ["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]
-# trial_vol = volClass.Vol_Data("2007-12-21", "2020-06-14", fred_strings = fred_s)
+# trial_vol = volClass.Vol_Data("2007-12-21", "2020-06-20", fred_strings = fred_s)
 # trial_regime_predict = rfClass.Regime_Predict(trial_vol)
-#
-# returns_matrix(bear_tickers,start_date="2010-12-20", end_date="2020-06-07")
-#
-# trial_port = Portfolio(start_date="2008-01-01", end_date="2020-06-14",bull_tickers = ["PNQI", "SPY", "XLK", "SPXL", "XLY", "XLF","SHY"], bear_tickers= ["PNQI", "SPY", "XLK", "SPXL", "XLY", "XLF","SHY"] ,regime_predict=trial_regime_predict)
-# trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
+# #
+# # returns_matrix(bear_tickers,start_date="2010-12-20", end_date="2020-06-07")
+# #
+# trial_port = Portfolio(start_date="2008-01-01", end_date="2020-06-20",bull_tickers = ["PNQI", "SPY","SPXL", "XLK", "XLY", "XLF","SHY"], bear_tickers= ["PNQI", "SPY", "XLK", "SPXL", "XLY", "XLF","SHY"] ,regime_predict=trial_regime_predict)
+# #trial_port.daily_bull_rmat.to_csv("bull_portfolio_returns.csv")
 # opt_daily  = trial_port.weekly_optimization()
 #
 # annual_vol = np.sqrt(opt_daily.var()) * np.sqrt(252)
 # annual_return = np.mean(opt_daily.mean())*252
-#
+# #
 # annual_return
 # annual_vol
 # ((opt_daily+1).cumprod()-1).plot()

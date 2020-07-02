@@ -7,10 +7,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import plot_confusion_matrix
 
-fred_s = ["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]
-trial_vol = volClass.Vol_Data("2007-01-01",end_date = "2020-06-01", fred_strings = fred_s)
+#fred_s = ["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "T10Y3M", "BAMLEMFSFCRPITRIV"]
+trial_vol = volClass.Vol_Data("2007-01-01", fred_strings = fred_s)
 x = trial_vol.weekly_fred_data()
+x.tail()
 x.shape
 y = trial_vol.weekly_vix() # weekly_vix should be the target data set for when we run our tests.
 y.shape
@@ -18,7 +21,7 @@ x.corr()
 
 x.tail()
 y.head()
-x_lag = x.drop(pd.to_datetime('2020-06-01'))
+x_lag = x.drop(pd.to_datetime('2020-06-29'))
 y_lag = y.drop(pd.to_datetime('2007-01-03'))
 x_lag.shape
 y_lag.shape
@@ -33,6 +36,7 @@ clf = RandomForestClassifier(n_estimators=200, max_depth = 140, max_features = '
 y_train = y_train.to_numpy()
 
 #Train the model using the training sets y_pred=clf.predict(X_test)
+
 clf.fit(X_train, y_train.ravel())
 y_prob = clf.predict_proba(X_test)
 
@@ -50,16 +54,17 @@ indices = np.argsort(importances)[::-1]
 
 # Print the feature ranking
 print("Feature ranking:")
-
 for f in range(X_train.shape[1]):
+
     print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
+
 
     # Plot the impurity-based feature importances of the forest
 col = x.columns
 plt.figure()
-plt.title("Feature importances")
+plt.title("Feature importance rankings")
 plt.bar(range(X_train.shape[1]), importances[indices],
-        color="r", yerr=std[indices], align="center")
+        color="green", yerr=std[indices], align="center")
 plt.xticks(range(X_train.shape[1]), indices)
 plt.xlim([-1, X_train.shape[1]])
 plt.show()
@@ -98,6 +103,7 @@ rfc_cv_score = cross_val_score(clf, x_lag, y_lag, cv=10)
 
 
 print(confusion_matrix(y_test, y_pred))
+plot_confusion_matrix(clf, X_test, y_test)
 
 
 print(classification_report(y_test, y_pred))

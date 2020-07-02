@@ -173,12 +173,15 @@ class Vol_Data:
         spy_dates = self.weekly_spy_volume().index
         drop_indicies = input_df.index.difference(spy_dates)
         spy_inputs = self.weekly_spy_volume().drop(drop_indicies)
+        bond_inputs = self.weekly_bond_volume().drop(drop_indicies)
+        gold_inputs = self.weekly_gold_volume().drop(drop_indicies)
         input_df["SPY_Volume"] = self.weekly_spy_volume()["Weekly_Volume"]
         input_df["SHY_Volume"] = self.weekly_bond_volume()["Weekly_Volume"]
         input_df["GDX_Volume"] = self.weekly_gold_volume()["Weekly_Volume"]
         return input_df
 
 
+<<<<<<< HEAD
 # fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
 # trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
 # inputs_df = trial_vol.weekly_fred_data()
@@ -187,6 +190,16 @@ class Vol_Data:
 # y.head()
 
 # y
+=======
+fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS"]
+trial_vol = Vol_Data("2018-01-01", fred_strings = fred_s)
+inputs_df = trial_vol.weekly_fred_data()
+inputs_df.tail()
+y = trial_vol.weekly_vix()
+y.head()
+
+y
+>>>>>>> d20cd4cde584ceca0f311500737f64ee59ca0d68
 # #
 # # #
 # inputs_df.loc[pd.to_datetime("2018-12-20"):]
