@@ -16,7 +16,7 @@ from sklearn.model_selection import RandomizedSearchCV
 
 class Regime_Predict:
     #### takes input vol_data which is expected to be an object from Vol_Data class
-    def __init__(self, vol_data, test_size = .3, n_estimators = 10, max_features = 'sqrt', max_depth = None):
+    def __init__(self, vol_data, test_size = .3, n_estimators = 100, max_features = 'sqrt', max_depth = None):
         self.vol_data = vol_data
         self.test_size = test_size
         self.n_estimators = n_estimators

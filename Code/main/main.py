@@ -19,7 +19,7 @@ def VaR(rvec,conf_level = .95):
     return float(final)
 
 class Vol_Outputs:
-    def __init__(self, start_date="2008-01-01", end_date= None, bull_tickers = ["PNQI", "SPY","SPXL", "XLK", "XLY", "XLF","SHY"], fred_strings=["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"]):
+    def __init__(self, start_date="2008-01-01", end_date= None, bull_tickers = ["PNQI", "SPY","SPXL", "XLK", "XLY", "XLF","SHY"], fred_strings=["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"], n_estimators = 100, max_features = 'sqrt', max_depth = None):
         self.vol_data = volClass.Vol_Data(start_date, end_date, fred_strings)
         self.regime_predict = rfClass.Regime_Predict(self.vol_data)
         self.portfolio = portfolioClass.Portfolio(start_date, end_date, bull_tickers, regime_predict = self.regime_predict)
@@ -29,7 +29,10 @@ class Vol_Outputs:
         self.end_date = end_date
         self.bull_tickers = bull_tickers
         self.fred_strings = fred_strings
-
+        self.n_estimators = n_estimators
+        self.max_features = max_features
+        self.max_depth = max_depth
+        
     def compare_equal(self):
         '''
         Compares the return and vol of an equally weighted portfolio with tickers above with the optimized portfolio. Returns a data frame
