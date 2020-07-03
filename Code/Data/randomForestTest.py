@@ -100,6 +100,7 @@ y_lag.shape
 y_lag = y_lag.ravel()
 type(y_lag)
 rfc_cv_score = cross_val_score(clf, x_lag, y_lag, cv=10)
+print(rfc_cv_score.mean())
 
 
 print(confusion_matrix(y_test, y_pred))
