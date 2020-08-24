@@ -8,7 +8,9 @@ from Code.Data import rfClass
 import scipy.stats as st
 
 '''
-Implement a class that takes in params which will run all classes and produce output
+Implement a class that takes in params which will run all classes and produce output.
+
+Portfolio with just PNQI, SPXL, and GLD produces best results
 '''
 def VaR(rvec,conf_level = .95):
     '''
@@ -19,7 +21,7 @@ def VaR(rvec,conf_level = .95):
     return float(final)
 
 class Vol_Outputs:
-    def __init__(self, start_date="2008-01-01", end_date= None, bull_tickers = ["PNQI", "SPY","SPXL", "XLK", "XLY", "XLF","SHY"], fred_strings=["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"], n_estimators = 100, max_features = 'sqrt', max_depth = None):
+    def __init__(self, start_date="2008-01-01", end_date= None, bull_tickers = ["PNQI","GLD","SPXL"], fred_strings=["DCOILBRENTEU" ,"BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "DEXCHUS", "DEXUSEU", "T10Y3M", "BAMLEMFSFCRPITRIV"], n_estimators = 100, max_features = 'sqrt', max_depth = None):
         self.vol_data = volClass.Vol_Data(start_date, end_date, fred_strings)
         self.regime_predict = rfClass.Regime_Predict(self.vol_data)
         self.portfolio = portfolioClass.Portfolio(start_date, end_date, bull_tickers, regime_predict = self.regime_predict)
@@ -32,7 +34,7 @@ class Vol_Outputs:
         self.n_estimators = n_estimators
         self.max_features = max_features
         self.max_depth = max_depth
-        
+
     def compare_equal(self):
         '''
         Compares the return and vol of an equally weighted portfolio with tickers above with the optimized portfolio. Returns a data frame
@@ -54,7 +56,7 @@ class Vol_Outputs:
         '''
         compares the return and vol of spy to optimized portfolio
         '''
-        spy_returns = self.portfolio.daily_bull_rmat["SPY"]
+        spy_returns = returns_matrix(["SPY"], self.start_date, self.end_date)["SPY"]
         spy_annual_ret = float(np.mean(spy_returns)*252)
         spy_annual_vol = float(np.std(spy_returns)*np.sqrt(252))
 
@@ -71,7 +73,7 @@ class Vol_Outputs:
         num_assets = len(self.bull_tickers)
         rmat = returns_matrix(self.bull_tickers, self.start_date, self.end_date)
         p_vec_equal = returns_vector(rmat, np.array(num_assets*[1./num_assets,]))
-        spy_returns = self.portfolio.daily_bull_rmat["SPY"]
+        spy_returns = returns_matrix(["SPY"], self.start_date, self.end_date)["SPY"]
         count = 0
         for i in range(0,len(dates),2):
             temp_opt,temp_pvec_equal,temp_spy = self.opt_daily.loc[pd.to_datetime(dates[i]):pd.to_datetime(dates[i+1])], p_vec_equal.loc[pd.to_datetime(dates[i]):pd.to_datetime(dates[i+1])], spy_returns.loc[pd.to_datetime(dates[i]):pd.to_datetime(dates[i+1])]
@@ -87,12 +89,18 @@ class Vol_Outputs:
 
 
 
-# v_trial = Vol_Outputs(end_date="2020-06-20")
+v_trial = Vol_Outputs(end_date="2020-06-20")
+
 #
 #
-# equal_compare = v_trial.compare_equal()
-# spy_compare = v_trial.compare_spy()
-#
+equal_compare = v_trial.compare_equal()
+spy_compare = v_trial.compare_spy()
+
+equal_compare
+spy_compare
+v_trial.analyze_volatile_periods()
+
+
 # VaR(v_trial.opt_daily)
 #
 # all_dfs = v_trial.analyze_volatile_periods()

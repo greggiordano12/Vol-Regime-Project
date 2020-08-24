@@ -141,3 +141,61 @@ np.mean(spy_weekly_corona)*52
 
 np.sqrt(corona_virus.var())*np.sqrt(52)
 np.mean(corona_virus)*52
+###############################################################################################
+
+
+def returns_matrix(tickers, start_date, end_date):
+    #NEED TO CHANGE FOR FACT THAT TICKERS HAVE VERY DIFFERENT DATA THAT THEY GO BACK TO#
+    '''
+    Creates a daily returns dataframe where each column is a different stock
+    '''
+    min_week = pd.to_datetime("1900-01-01") #sets initial week as today
+    rmat = []
+    data_dic = {}
+    count = 0
+    for tick in tickers:
+        temp_df = pdr.DataReader(tick, "yahoo", start_date, end_date)
+        temp_dates = temp_df.index
+        data_dic[count] = temp_df
+
+        if temp_dates[0] > min_week:
+            min_week = temp_dates[0]
+        count +=1
+    for i in range(len(tickers)):
+        temp_df = data_dic[i]
+        temp_dates = temp_df.index
+        if temp_dates[0] != min_week:
+            drop_index = list(temp_dates).index(min_week)
+            temp_df = temp_df.drop(temp_dates[:drop_index])
+        temp_returns = np.log(temp_df.Close) - np.log(temp_df.Close.shift(1))
+        temp_returns = list(temp_returns[1:])
+        rmat = rmat + [temp_returns]
+    rmat = np.array(rmat)
+    dates = temp_df.index
+    rdf=pd.DataFrame({tickers[i]:rmat[i] for i in range(len(tickers))})
+    rdf.index = dates[1:]
+    return rdf
+
+rmat = returns_matrix(tickers = ["SPY","FXI", "VXX", "GLD", "USO","BTAL", "EWS","EWH"], start_date="2015-01-01", end_date="2020-07-06")
+rmat.corr()
+np.mean(rmat["SPY"])*(252)
+weekly_data(rmat["EWS"])
+np.corrcoef(ews, ewh)[0][1]
+import matplotlib.pyplot as plt
+ews = rmat["EWS"]
+ewh = rmat["EWH"]
+spy = rmat["SPY"]
+corrs = []
+for i in range(252,len(rmat["EWS"])):
+    temp_ews = ews[i-252:i]
+    temp_ewh = ewh[i-252:i]
+    corrs.append(np.corrcoef(temp_ews,temp_ewh)[0][1])
+
+
+corr_df = pd.DataFrame({"Date":rmat.index[252:], "Corr":corrs})
+corr_df = corr_df.set_index("Date")
+corr_df.plot()
+plt.title("Yearly Moving Correlation Hong Kong/Singapore")
+plt.ylabel("Correlation")
+plt.show()
+np.std(corrs)
