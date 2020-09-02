@@ -6,7 +6,7 @@ from Code.Trading_Strats.portfolioClass import returns_matrix, portfolio_return,
 from Code.Data.Inputs import volClass
 from Code.Data import rfClass
 import scipy.stats as st
-
+import matplotlib.pyplot as plt
 '''
 Implement a class that takes in params which will run all classes and produce output.
 
@@ -88,43 +88,29 @@ class Vol_Outputs:
         return all_dfs
 
 
-
-v_trial = Vol_Outputs(end_date="2020-06-20")
-
 #
+# v_trial = Vol_Outputs(bull_tickers = ["SPXL","GLD","PNQI"],end_date="2020-06-20")
 #
-equal_compare = v_trial.compare_equal()
-spy_compare = v_trial.compare_spy()
-
-equal_compare
-spy_compare
-v_trial.analyze_volatile_periods()
-
-
-# VaR(v_trial.opt_daily)
+# equal_compare = v_trial.compare_equal()
+# spy_compare = v_trial.compare_spy()
+# equal_compare
+# spy_compare
+# #
+# #
+# equal_compare_SPXL_TMF = v_trial.compare_equal()
+# spy_compare_SPXL_TMF = v_trial.compare_spy()
 #
-# all_dfs = v_trial.analyze_volatile_periods()
-# all_dfs[5]
-
-# ############ Finding most volatiltiy in 2 months. 21 trading days in 2 months ###############
-# SPY_data=pdr.DataReader("SPY", "yahoo", "2008-11-20")
-# SPY_returns = (np.log(SPY_data.Close) - np.log(SPY_data.Close.shift(1)))[1:]
-# top_10_greatest_vols = []
-# for i in range(0,len(SPY_returns), int(252/6)):
-#     temp_2month = SPY_returns[i:int(i+(252/6))]
-#     temp_annual_vol = np.std(temp_2month)*np.sqrt(252)
-#     temp_tup = (temp_annual_vol, temp_2month.index[0])
-#     if len(top_10_greatest_vols) < 10:
-#         top_10_greatest_vols.append(temp_tup)
-#     else:
-#         for j in range(len(top_10_greatest_vols)):
-#             if top_10_greatest_vols[j][0]<temp_tup[0]:
-#                 top_10_greatest_vols[j] = temp_tup
-#                 break
+# equal_compare_SPXL_TMF
+# spy_compare_SPXL_TMF
 #
+# v_trial.analyze_volatile_periods()
 #
+# rmat=returns_matrix(["PNQI","SPXL","GLD"],start_date="2008-01-01",end_date="2020-06-20")
+# rmat.corr()
+# optimal_returns = v_trial.opt_daily.dropna()
+# optimal_returns.index
+# spy_returns = returns_matrix(['SPY'], start_date="2008-11-09", end_date="2020-06-20")
+# cum_optimal_returns, cum_spy_returns = ((optimal_returns+1).cumprod()-1),((spy_returns+1).cumprod()-1)
+# plt.plot(cum_optimal_returns)
+# plt.plot(cum_spy_returns)
 #
-# top_10_greatest_vols
-# i
-# temp_2month
-#  Timestamp('2009-01-26 00:00:00'))

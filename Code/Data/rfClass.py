@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas_datareader as pdr
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.metrics import plot_confusion_matrix
+# from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import RandomizedSearchCV
 
 class Regime_Predict:
@@ -47,10 +47,10 @@ class Regime_Predict:
         print("The accuracy of our model to predict the right category is: ")
         print("%.3f" % x*100 + "%")
 
-    def confusion_matrix(self):
-        # Need to edit the graph for more Information
-        print("Confusion Matrix: ")
-        plot_confusion_matrix(self.clf, self.X_test, self.y_test,  cmap = plt.cm.Greens)
+    # def confusion_matrix(self):
+    #     # Need to edit the graph for more Information
+    #     print("Confusion Matrix: ")
+    #     plot_confusion_matrix(self.clf, self.X_test, self.y_test,  cmap = plt.cm.Greens)
 
     def classification_report(self):
         print(classification_report(self.y_test, self.y_pred))
@@ -126,11 +126,11 @@ class Regime_Predict:
 
 # Get more outputs descrbing accuracy of the random forest
 
-fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "T10Y3M", "BAMLEMFSFCRPITRIV"]
-trial_vol = volClass.Vol_Data("2007-01-01", fred_strings = fred_s)
-#
-trial_regime_predict = Regime_Predict(trial_vol, n_estimators = 400, max_depth = 180)
-trial_regime_predict.inputs.columns
+# fred_s = ["DCOILBRENTEU","BAMLH0A0HYM2", "GOLDAMGBD228NLBM","DAAA","RIFSPPFAAD01NB","BAMLHE00EHYIOAS", "T10Y3M", "BAMLEMFSFCRPITRIV"]
+# trial_vol = volClass.Vol_Data("2007-01-01", fred_strings = fred_s)
+# #
+# trial_regime_predict = Regime_Predict(trial_vol, n_estimators = 400, max_depth = 180)
+# trial_regime_predict.inputs.columns
 
 # trial_regime_predict.plot_feature_importances()
 # trial_regime_predict.plot_feature_rankings()
