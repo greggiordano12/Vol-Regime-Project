@@ -89,28 +89,28 @@ class Vol_Outputs:
 
 
 #
-# v_trial = Vol_Outputs(bull_tickers = ["SPXL","GLD","PNQI"],end_date="2020-06-20")
-#
+# v_trial = Vol_Outputs(bull_tickers = ["SPXL","GLD","SHY","PNQI"],end_date="2020-06-20")
+# #
 # equal_compare = v_trial.compare_equal()
 # spy_compare = v_trial.compare_spy()
 # equal_compare
 # spy_compare
+# # #
+# # #
+# # equal_compare_SPXL_TMF = v_trial.compare_equal()
+# # spy_compare_SPXL_TMF = v_trial.compare_spy()
 # #
+# # equal_compare_SPXL_TMF
+# # spy_compare_SPXL_TMF
 # #
-# equal_compare_SPXL_TMF = v_trial.compare_equal()
-# spy_compare_SPXL_TMF = v_trial.compare_spy()
-#
-# equal_compare_SPXL_TMF
-# spy_compare_SPXL_TMF
-#
-# v_trial.analyze_volatile_periods()
-#
-# rmat=returns_matrix(["PNQI","SPXL","GLD"],start_date="2008-01-01",end_date="2020-06-20")
-# rmat.corr()
+# # v_trial.analyze_volatile_periods()
+# #
+# # rmat=returns_matrix(["PNQI","SPXL","GLD"],start_date="2008-01-01",end_date="2020-06-20")
+# # rmat.corr()
 # optimal_returns = v_trial.opt_daily.dropna()
 # optimal_returns.index
 # spy_returns = returns_matrix(['SPY'], start_date="2008-11-09", end_date="2020-06-20")
 # cum_optimal_returns, cum_spy_returns = ((optimal_returns+1).cumprod()-1),((spy_returns+1).cumprod()-1)
 # plt.plot(cum_optimal_returns)
 # plt.plot(cum_spy_returns)
-#
+# #
