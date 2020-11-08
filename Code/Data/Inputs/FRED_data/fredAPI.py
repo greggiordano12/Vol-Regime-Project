@@ -45,3 +45,4 @@ temp_df.head()
 df = fred.get_series_info("BAMLHE00EHYIOAS")
 df["frequency_short"]
 fred.search('housing')
+print(df)
